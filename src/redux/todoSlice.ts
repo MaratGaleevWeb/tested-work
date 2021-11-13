@@ -20,17 +20,20 @@ const todoSlice = createSlice({
   name: 'todos',
   initialState,
   reducers: {
-    addTodo({ todos }, { payload }: PayloadAction<string>) {
+    addTodo({ todos }, { payload }: PayloadAction<{ message: string; createdAt: string }>) {
       const isThisTodoExistent = todos.find(
-        ({ message }) => message.toLowerCase() === payload.toLowerCase(),
+        ({ message }) => message.toLowerCase() === payload.message.toLowerCase(),
       )
       if (isThisTodoExistent) return
 
       todos.push({
         id: uuidv4(),
-        message: payload,
+        message: payload.message,
         status: false,
-        createdAt: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+        createdAt:
+          new Date(payload.createdAt).toLocaleDateString() +
+          ' ' +
+          new Date(payload.createdAt).toLocaleTimeString(),
       })
     },
 
